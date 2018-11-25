@@ -1,0 +1,92 @@
+/* General Styles */
+
+body {
+  padding: 50px;
+  font-size: 16px;
+  line-height:22pt;
+  font-family: 'Source Sans Pro', sans-serif;
+  color:#202121;
+  max-width:1200px;
+}
+
+@media (min-width: 1200px) {
+
+	body {
+		left:50%;
+		margin-left:-600px;
+		position:absolute;
+	}
+}
+
+@media (max-width: 980px) {
+	body {
+		padding:15px;
+	}
+	body {
+		padding:15px;
+	}
+	.big_screen {
+		display:none;
+	}
+}
+
+@media (min-width: 980px) {
+	.small_screen {
+		display:none;
+	}
+}
+
+a {
+  color: #00B7FF;
+}
+
+.blurb_wrapper {
+	margin-top:50px;
+}
+
+@media (max-width: 980px) {
+	.blurb_wrapper {
+		margin-top:15px;
+	}
+}
+
+.homepage_story {
+	margin-top:50px;
+	padding:50px;
+	background-color:#f2f2f2;
+}
+
+@media (max-width: 980px) {
+	.homepage_story {
+		margin-top:15px;
+		padding:15px;
+	}
+}
+
+.homepage_story h3 {
+	
+}
+
+/* Special Styles (one-off uses) */
+
+.blog_heading_wrapper {
+	padding:50px;
+	font-size:72pt;
+	line-height: 72pt;
+	font-weight:700;
+	background-color:#b3ffe0;
+	color:#808080;
+}
+
+@media (max-width: 980px) {
+	.blog_heading_wrapper {
+		padding:15px;
+	}
+}
+
+.blog_sub_heading {
+	font-size:22pt;
+	font-weight:300;
+	line-height: 28pt
+}
+
