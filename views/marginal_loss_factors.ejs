@@ -29,22 +29,30 @@
                     controlSize: 28,
                     streetViewControl: false
                 });
+
             $.ajax({
                 method: "POST",
                 url: "/marginal_loss_factor_data",
             })
 
-            .done(function(grid_overlay) {
-                console.log(grid_overlay)
-                for (line=0;line<grid_overlay.length;line++) {
+            .done(function(grid_map_ref_browser) {
 
-                    var grid_line = new google.maps.Polyline(grid_overlay[line])
-                    grid_line.setMap(map)
+                for (transmission_line=0;transmission_line<grid_map_ref_browser.transmission.length;transmission_line++) {
 
+                    var grid_polyline = new google.maps.Polyline(grid_map_ref_browser.transmission[transmission_line])
+
+                    grid_polyline.addListener('click', function() { 
+                        inspect('t', this.id)
+                    })
+
+                    grid_polyline.setMap(map)
                 }
             });
         }
     </script>
+    <div id='inspection_output'>
+    </div>
+
     <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,

@@ -6,22 +6,50 @@ var moment = require(`moment`)
 
 // index
 
-router.get('/', function(req, res, next) {
-  res.render('index');
-});
+	router.get('/', function(req, res, next) {
+	  res.render('index');
+	});
 
 // marginal_loss_factors
 
-var mlf_overlay = require('./marginal_loss_factors.js')
-grid_overlay = mlf_overlay()
+	router.get('/marginal_loss_factors', function(req, res, next) {
+		res.render('marginal_loss_factors')
+	})
 
-router.get('/marginal_loss_factors', function(req, res, next) {
-  res.render('marginal_loss_factors');
-});
+	// Collect Data
 
-router.post('/marginal_loss_factor_data', function(req, res, next) {
-  res.send(grid_overlay);
-});
+	run_map_ref_builder = true
+	var grid_map_ref_server = {}
+	var grid_map_ref_browser = {}
+
+	if (run_map_ref_builder) {
+		var map_ref_builder = require('./map_ref_builder.js')
+		map_ref_builder( function (server_data,browser_data) {
+			grid_map_ref_server = server_data
+			grid_map_ref_browser = browser_data
+		})
+	} else {
+		grid_map_ref_server = require('../data/grid_map_ref_server.json')
+		grid_map_ref_browser = require('../data/grid_map_ref_browser.json')
+	}
+
+	// Send Browser Map Info
+
+	router.post('/marginal_loss_factor_data', function(req, res, next) {
+	  	res.send(grid_map_ref_browser)
+	})
+
+	// Send Inspection Data
+
+	router.post('/marginal_loss_factor_inspection', function(req, res, next) {
+		if (req.body.type == 't') {
+			for (transmission_line=0;transmission_line<grid_map_ref_server.transmission.length;transmission_line++) {
+			  	if (grid_map_ref_server.transmission[transmission_line].id == req.body.id) {
+			  		res.send(grid_map_ref_server.transmission[transmission_line].properties.description)
+			  	}
+	  		}
+		}
+	})
 
 // generators
 
