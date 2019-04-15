@@ -20,7 +20,7 @@ var moment = require(`moment`)
 
 	// Collect Data
 
-	run_map_ref_builder = false
+	run_map_ref_builder = true
 	var grid_map_ref_server = {}
 	var grid_map_ref_browser = {}
 
