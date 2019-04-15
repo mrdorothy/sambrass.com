@@ -12,23 +12,95 @@
     <h1>Marginal Loss Factors</h1>
     <h3>April 2019</h3>
     <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        This dynamic marginal loss factor visualisation explores the impact of new generators on loss factors. Cycle through years to see the arrival of new generators. 
     </p>
     <div id="marginal_loss_factor_map"></div>        
     <script>
+
+        var current_year = 2020
+
+        function set_control(control_div, map, pointer, font_size, control_string, trigger_function) {
+
+            // Set CSS for the control border.
+            var control_ui = document.createElement('div')
+            control_ui.style.backgroundColor = '#ffffff'
+            control_ui.style.borderRadius = '2px'
+            if (pointer) {
+                control_ui.style.cursor = 'pointer'
+            }
+            control_ui.style.marginTop = '7px'
+            control_ui.style.marginRight = '7px'
+            control_ui.style.textAlign = 'center'
+            control_div.appendChild(control_ui)
+
+            // Set CSS for the control interior.
+            var control_text = document.createElement('div')
+            control_text.style.color = '#202121';
+            control_text.style.fontFamily = 'Roboto,Arial,sans-serif'
+            control_text.style.fontSize = font_size
+            control_text.style.lineHeight = '28px'
+            control_text.style.paddingLeft = '5px'
+            control_text.style.paddingRight = '5px'
+            control_text.className = 'control_text'
+            if (control_string == '2020') {
+                control_text.id = 'current_year_text'
+            }
+            control_text.innerHTML = control_string
+            control_ui.appendChild(control_text)
+
+            // Setup the click event listeners: simply set the map to Chicago.
+            if (trigger_function) {
+                control_ui.addEventListener('click', function() {
+                  trigger_function()
+                });
+            }
+
+        }
+
+        var generator_markers = []
+
         function initMap() {
             var map = new google.maps.Map(
-                document.getElementById('marginal_loss_factor_map'), { 
+                document.getElementById('marginal_loss_factor_map'), 
+                { 
                     zoom: 5, 
                     center: { lat: -25.344, lng: 131.036 }, 
                     controlSize: 28,
                     streetViewControl: false
-                });
+                }
+            );
+
+            var right_arrow_control_div = document.createElement('div');
+            var year_control_div = document.createElement('div');
+            var left_arrow_control_div = document.createElement('div');
+            
+            var right_arrow_control = new set_control(right_arrow_control_div, map, true, '20px', '&#8702;', function() {
+                if (current_year<2020) {
+                    temp_current_year=current_year+1
+                    reload_generators(temp_current_year, map, function() {
+                        current_year=temp_current_year
+                        document.getElementById('current_year_text').innerHTML = current_year
+                    })
+                }
+            })
+            var year_control = new set_control(year_control_div, map, false,'14px', '2020', null)
+            var left_arrow_control = new set_control(left_arrow_control_div, map, true, '20px', '&#8701;', function() {
+                if (current_year>2013) {
+                    temp_current_year=current_year-1
+                    reload_generators(temp_current_year, map, function() {
+                        current_year=temp_current_year
+                        document.getElementById('current_year_text').innerHTML = current_year
+                    })
+                }
+            })
+
+            right_arrow_control_div.index = 1;
+            year_control_div.index = 1;
+            left_arrow_control_div.index = 1;
+
+            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(right_arrow_control_div);
+            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(year_control_div);
+            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(left_arrow_control_div);       
 
             $.ajax({
                 method: "POST",
@@ -47,22 +119,215 @@
 
                     grid_polyline.setMap(map)
                 }
+
+                var elec_station_markers = []
+
+                var substation_marker = new google.maps.MarkerImage(
+                    '/images/map_icons/substation.png',
+                    new google.maps.Size(16,16), //size
+                    null, //origin
+                    null, //anchor
+                    new google.maps.Size(16,16) //scale
+                );
+
+                for (elec_station=0;elec_station<grid_map_ref_browser.elec_station.length;elec_station++) {
+
+                    grid_map_ref_browser.elec_station[elec_station].icon = substation_marker
+                    var grid_marker = new google.maps.Marker(grid_map_ref_browser.elec_station[elec_station])
+
+                    grid_marker.addListener('click', function() { 
+                        inspect('e', this.id)
+                    })
+
+                    grid_marker.setMap(null)
+
+                    elec_station_markers.push(grid_marker)
+                }
+
+                // Generators
+
+                for (generator=0;generator<grid_map_ref_browser.generator.length;generator++) {
+
+                    var generation_marker = new google.maps.MarkerImage(
+                        '/images/map_icons/' + grid_map_ref_browser.generator[generator].icon,
+                        new google.maps.Size(8,8), //size
+                        null, //origin
+                        null, //anchor
+                        new google.maps.Size(8,8) //scale
+                    );
+
+                    grid_map_ref_browser.generator[generator].icon = generation_marker
+
+                    var generator_marker = new google.maps.Marker(grid_map_ref_browser.generator[generator])
+
+                    generator_marker.addListener('click', function() { 
+                        inspect('g', this.id)
+                    })
+
+                    generator_marker.setMap(map)
+
+                    generator_markers.push(generator_marker)
+
+                }
+
+                // Handle Market Scaling on Zoom
+
+                map.addListener('zoom_changed', function() {
+                    
+                    var zoom = map.getZoom()
+
+                    if (zoom<6) {
+                        for(marker=0;marker<elec_station_markers.length;marker++) {
+                            elec_station_markers[marker].setMap(null)
+                        }
+                    } else {
+                        if (zoom>10) {
+                            relative_pixel_size = 64
+                        } else {
+                            var interum_sizes = [8,16,16, 16, 32]
+                            relative_pixel_size = interum_sizes[zoom-6]
+                        }
+
+                        for(marker=0;marker<elec_station_markers.length;marker++) {
+                            elec_station_markers[marker].setIcon(
+                                new google.maps.MarkerImage(
+                                    elec_station_markers[marker].getIcon().url,
+                                    null, //size
+                                    null, //origin
+                                    null, //anchor
+                                    new google.maps.Size(relative_pixel_size, relative_pixel_size) 
+                                )
+                            )       
+                        }
+
+                        for(marker=0;marker<elec_station_markers.length;marker++) {
+                            elec_station_markers[marker].setMap(map)
+                        }
+                    }
+
+                    if (zoom<5) {
+                        for(marker=0;marker<generator_markers.length;marker++) {
+                            generator_markers[marker].setMap(null)
+                        }
+                    } else {
+                        if (zoom>10) {
+                            relative_pixel_size = 64
+                        } else {
+                            var interum_sizes = [8,16,32,32, 32, 64]
+                            relative_pixel_size = interum_sizes[zoom-5]
+                        }
+
+                        for(marker=0;marker<generator_markers.length;marker++) {
+                            generator_markers[marker].setIcon(
+                                new google.maps.MarkerImage(
+                                    generator_markers[marker].getIcon().url,
+                                    null, //size
+                                    null, //origin
+                                    null, //anchor
+                                    new google.maps.Size(relative_pixel_size, relative_pixel_size) 
+                                )
+                            )       
+                        }
+
+                        for(marker=0;marker<generator_markers.length;marker++) {
+                            generator_markers[marker].setMap(map)
+                        }
+                    }
+
+                })
+
             });
         }
     </script>
+    
     <div id='inspection_output'>
+    </div>
+    <div id='marginal_loss_factor_legend'>
+        <div>
+            <span>
+                MLF Colour Scheme
+            </span>
+            <table>
+                <tr>
+                    <th>MLF Range</th>
+                    <th>Colour</th>
+                </tr>
+                <tr>
+                    <td>&gt;1.000</td>
+                    <td style='background-color:#0044aa; color:#d5e5ff'>Dark Blue</td>
+                </tr>
+                <tr>
+                    <td>1.000-0.975</td>
+                    <td style='background-color:#0066ff; color:#d5e5ff'>Blue</td>
+                </tr>
+                <tr>
+                    <td>0.975-0.950</td>
+                    <td style='background-color:#80b3ff; color:#d5e5ff'>Light Blue</td>
+                </tr>
+                <tr>
+                    <td>0.950-0.925</td>
+                    <td style='background-color:#ffaaaa; color:#ff2a2a'>Light Red</td>
+                </tr>
+                <tr>
+                    <td>0.925-0.900</td>
+                    <td style='background-color:#ff8080; color:#ffd5d5'>Red</td>
+                </tr>
+                <tr>
+                    <td>0.900-0.875</td>
+                    <td style='background-color:#ff2a2a; color:#ffd5d5'>Dark Red</td>
+                </tr>
+                <tr>
+                    <td>&lt;0.875</td>
+                    <td style='background-color:#aa0000; color:#ffd5d5'>Very Dark Red</td>
+                </tr>
+            </table>
+        </div>
+        <div>    
+            <table>
+                <span>
+                    Transmission Line Colour Scheme
+                </span>
+                <tr>
+                    <th>Line Voltage (kV)</th>
+                    <th>Colour</th>
+                </tr>
+                <tr>
+                    <td>11, 22, 33, 44, 66 &amp; 88</td>
+                    <td style='background-color:#ff4d6d;'></td>
+
+                </tr>
+                <tr>
+                    <td>110 &amp; 132</td>
+                    <td style='background-color:#ff1a44;'></td>
+                </tr>
+                <tr>
+                    <td>220 &amp; 275</td>
+                    <td style='background-color:#cc0025;'></td>
+                </tr>
+                <tr>
+                    <td>300</td>
+                    <td style='background-color:#800017;'></td>
+                </tr>
+                <tr>
+                    <td>400 &amp; 500</td>
+                    <td style='background-color:#330009;'></td>
+                </tr>
+            </table>
+        </div>
     </div>
 
     <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        Shifting away from a carbon based electricity sector means a shift in where that electricity is produced. Proximity to sunlight and wind replaces proximity to coal and gas. Changing power flows mean that transmission line loses also change. These loss factors provide critical economic signals to new renewable generation projects. <br><br>
+
+        Intelligent transmission augmentation is a critical enabler of decarbonisation. <br><br>
+
+        Data sources: Loss factor, generator and line information from <a href='http://www.aemo.com.au'>AEMO</a>.<br><br>
+
+        Further reading: AEMO's <a href='https://www.aemo.com.au/-/media/Files/Electricity/NEM/Security_and_Reliability/Loss_Factors_and_Regional_Boundaries/2016/Treatment_of_Loss_Factors_in_the_NEM.pdf'>Treatment of Loss Factors</a> provides detailed background on loss factors within the NEM. The <a href='https://www.aemo.com.au/-/media/Files/Electricity/NEM/Planning_and_Forecasting/ISP/2018/Integrated-System-Plan-2018_final.pdf'>2018 Intergrated System Plan</a> details AEMO's proposed Renewable Energy Zones which capture this sentiment of transmission as an enabler.
     </p>
 
-    
+    <% include footer.ejs %> 
+
     </body> 
     <script src = "/javascripts/jquery.js"></script>
     <script src = "/javascripts/marginal_loss_factor.js"></script>
