@@ -24,6 +24,92 @@
     <div id='loading_wheel_wrapper'>
         <img class='loading_wheel' src='/images/loading_wheel.svg'/> 
     </div>         
+    <div id='inspection_output' style='display:none;'>
+    </div>
+    <div id='marginal_loss_factor_legend' style='display:none;'>
+        <div>
+            <span>
+                MLF Colour Scheme
+            </span>
+            <table>
+                <tr>
+                    <th>MLF Range</th>
+                    <th>Colour</th>
+                </tr>
+                <tr>
+                    <td>&gt;1.000</td>
+                    <td style='background-color:#0044aa; color:#d5e5ff'>Dark Blue</td>
+                </tr>
+                <tr>
+                    <td>1.000-0.975</td>
+                    <td style='background-color:#0066ff; color:#d5e5ff'>Blue</td>
+                </tr>
+                <tr>
+                    <td>0.975-0.950</td>
+                    <td style='background-color:#80b3ff; color:#d5e5ff'>Light Blue</td>
+                </tr>
+                <tr>
+                    <td>0.950-0.925</td>
+                    <td style='background-color:#ffaaaa; color:#ff2a2a'>Light Red</td>
+                </tr>
+                <tr>
+                    <td>0.925-0.900</td>
+                    <td style='background-color:#ff8080; color:#ffd5d5'>Red</td>
+                </tr>
+                <tr>
+                    <td>0.900-0.875</td>
+                    <td style='background-color:#ff2a2a; color:#ffd5d5'>Dark Red</td>
+                </tr>
+                <tr>
+                    <td>&lt;0.875</td>
+                    <td style='background-color:#aa0000; color:#ffd5d5'>Very Dark Red</td>
+                </tr>
+            </table>
+        </div>
+        <div>    
+            <table>
+                <span>
+                    Transmission Line Colour Scheme
+                </span>
+                <tr>
+                    <th>Line Voltage (kV)</th>
+                    <th>Colour</th>
+                </tr>
+                <tr>
+                    <td>11, 22, 33, 44, 66 &amp; 88</td>
+                    <td style='background-color:#ff4d6d;'></td>
+
+                </tr>
+                <tr>
+                    <td>110 &amp; 132</td>
+                    <td style='background-color:#ff1a44;'></td>
+                </tr>
+                <tr>
+                    <td>220 &amp; 275</td>
+                    <td style='background-color:#cc0025;'></td>
+                </tr>
+                <tr>
+                    <td>300</td>
+                    <td style='background-color:#800017;'></td>
+                </tr>
+                <tr>
+                    <td>400 &amp; 500</td>
+                    <td style='background-color:#330009;'></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <p id='marginal_loss_factor_blurb' style='display:none;'>
+        Shifting away from a carbon based electricity sector means a shift in where that electricity is produced. Proximity to sunlight and wind replaces proximity to coal and gas. Changing power flows mean that transmission line loses also change. These loss factors provide critical economic signals to new renewable generation projects. <br><br>
+
+        Intelligent transmission augmentation is a critical enabler of decarbonisation. <br><br>
+
+        Data sources: Loss factor, generator and line information from <a href='http://www.aemo.com.au'>AEMO</a>.<br><br>
+
+        Further reading: AEMO's <a href='https://www.aemo.com.au/-/media/Files/Electricity/NEM/Security_and_Reliability/Loss_Factors_and_Regional_Boundaries/2016/Treatment_of_Loss_Factors_in_the_NEM.pdf'>Treatment of Loss Factors</a> provides detailed background on loss factors within the NEM. The <a href='https://www.aemo.com.au/-/media/Files/Electricity/NEM/Planning_and_Forecasting/ISP/2018/Integrated-System-Plan-2018_final.pdf'>2018 Intergrated System Plan</a> details AEMO's proposed Renewable Energy Zones which capture this sentiment of transmission as an enabler.
+    </p>
+
     <script>
 
         var current_year = 2020
@@ -246,95 +332,12 @@
                 })
                 document.getElementById('loading_wheel_wrapper').style.display = 'none'
                 document.getElementById('marginal_loss_factor_map').style.display = 'block'
+                document.getElementById('inspection_output').style.display = 'block'
+                document.getElementById('marginal_loss_factor_legend').style.display = 'block'
+                document.getElementById('marginal_loss_factor_blurb').style.display = 'block'
             });
         }
     </script>
-    
-    <div id='inspection_output'>
-    </div>
-    <div id='marginal_loss_factor_legend'>
-        <div>
-            <span>
-                MLF Colour Scheme
-            </span>
-            <table>
-                <tr>
-                    <th>MLF Range</th>
-                    <th>Colour</th>
-                </tr>
-                <tr>
-                    <td>&gt;1.000</td>
-                    <td style='background-color:#0044aa; color:#d5e5ff'>Dark Blue</td>
-                </tr>
-                <tr>
-                    <td>1.000-0.975</td>
-                    <td style='background-color:#0066ff; color:#d5e5ff'>Blue</td>
-                </tr>
-                <tr>
-                    <td>0.975-0.950</td>
-                    <td style='background-color:#80b3ff; color:#d5e5ff'>Light Blue</td>
-                </tr>
-                <tr>
-                    <td>0.950-0.925</td>
-                    <td style='background-color:#ffaaaa; color:#ff2a2a'>Light Red</td>
-                </tr>
-                <tr>
-                    <td>0.925-0.900</td>
-                    <td style='background-color:#ff8080; color:#ffd5d5'>Red</td>
-                </tr>
-                <tr>
-                    <td>0.900-0.875</td>
-                    <td style='background-color:#ff2a2a; color:#ffd5d5'>Dark Red</td>
-                </tr>
-                <tr>
-                    <td>&lt;0.875</td>
-                    <td style='background-color:#aa0000; color:#ffd5d5'>Very Dark Red</td>
-                </tr>
-            </table>
-        </div>
-        <div>    
-            <table>
-                <span>
-                    Transmission Line Colour Scheme
-                </span>
-                <tr>
-                    <th>Line Voltage (kV)</th>
-                    <th>Colour</th>
-                </tr>
-                <tr>
-                    <td>11, 22, 33, 44, 66 &amp; 88</td>
-                    <td style='background-color:#ff4d6d;'></td>
-
-                </tr>
-                <tr>
-                    <td>110 &amp; 132</td>
-                    <td style='background-color:#ff1a44;'></td>
-                </tr>
-                <tr>
-                    <td>220 &amp; 275</td>
-                    <td style='background-color:#cc0025;'></td>
-                </tr>
-                <tr>
-                    <td>300</td>
-                    <td style='background-color:#800017;'></td>
-                </tr>
-                <tr>
-                    <td>400 &amp; 500</td>
-                    <td style='background-color:#330009;'></td>
-                </tr>
-            </table>
-        </div>
-    </div>
-
-    <p>
-        Shifting away from a carbon based electricity sector means a shift in where that electricity is produced. Proximity to sunlight and wind replaces proximity to coal and gas. Changing power flows mean that transmission line loses also change. These loss factors provide critical economic signals to new renewable generation projects. <br><br>
-
-        Intelligent transmission augmentation is a critical enabler of decarbonisation. <br><br>
-
-        Data sources: Loss factor, generator and line information from <a href='http://www.aemo.com.au'>AEMO</a>.<br><br>
-
-        Further reading: AEMO's <a href='https://www.aemo.com.au/-/media/Files/Electricity/NEM/Security_and_Reliability/Loss_Factors_and_Regional_Boundaries/2016/Treatment_of_Loss_Factors_in_the_NEM.pdf'>Treatment of Loss Factors</a> provides detailed background on loss factors within the NEM. The <a href='https://www.aemo.com.au/-/media/Files/Electricity/NEM/Planning_and_Forecasting/ISP/2018/Integrated-System-Plan-2018_final.pdf'>2018 Intergrated System Plan</a> details AEMO's proposed Renewable Energy Zones which capture this sentiment of transmission as an enabler.
-    </p>
 
     <% include footer.ejs %> 
 
