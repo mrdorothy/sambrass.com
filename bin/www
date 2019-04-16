@@ -19,6 +19,9 @@ var production = true
 
 if (production) {
   app.use (function (req, res, next) {
+    log(req.headers['x-forwarded-proto'])
+    log(req.secure)
+    log(req.protocol)
     if (req.headers['x-forwarded-proto'] === 'https') {
       next();
     } else {
