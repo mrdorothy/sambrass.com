@@ -8,16 +8,8 @@ var production = true
 
 if (production) {
   router.get('*', function(req, res) {
-  	log(req.secure)
   	log(req.protocol)
-  if (req.secure) {
-  		next()
-  		log('secure!')
-  	} else {
-  		log('redirecting!')
-      	res.redirect('https://' + req.headers.host + req.url)
-    }
-  })
+  }
 }
 
 // index
