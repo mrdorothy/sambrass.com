@@ -16,17 +16,17 @@ app.set('view engine', 'ejs');
 
 app.enable('trust proxy');
 
-var production = true
-
-if (production) {
-	app.use (function (req, res, next) {
-	    if (req.secure) {
-	     	next()
-	    } else {
-	      	res.redirect('https://' + req.headers.host + req.url);
-	    }
-	})
-}
+app.use (function (req, res, next) {
+    if(req.headers.host == 'localhost:3000') {
+        next()
+    } else {
+  	    if (req.secure) {
+  	     	next()
+  	    } else {
+  	      	res.redirect('https://' + req.headers.host + req.url);
+  	    }
+    }
+})
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
