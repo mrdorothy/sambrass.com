@@ -3,7 +3,7 @@ module.exports = {
 	format_properties_as_table: function(properties_object) {
 		var table_string = '<table>'
 		for (properties in properties_object) {
-			if (properties_object[properties]!= null && properties_object[properties]!= '') {
+			if (properties_object[properties]!= null && properties_object[properties]!= '' && properties_object[properties]!= 'NaN kV') {
 				table_string += `
 					<tr>
 						<th> 

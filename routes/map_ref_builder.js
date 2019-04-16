@@ -222,6 +222,17 @@ module.exports = function(callback) {
                             icon: temp_color + '_' + generator_json[generator].marker_type.toLowerCase() + '.png' 
                         })
                     }
+                    if (generator_json[generator].region == 'WA') {
+                        var temp_color='grey'
+                        grid_map_ref_browser.generator.push({
+                            id: generator_json[generator].id,
+                            position: generator_json[generator].position,
+                            size: generator_json[generator].total_cap,
+                            icon: temp_color + '_' + generator_json[generator].marker_type.toLowerCase() + '.png' 
+                        })
+                    }
+
+
                 }
 
                 for (generator=0; generator<grid_map_ref_server.generator.length;generator++) {
