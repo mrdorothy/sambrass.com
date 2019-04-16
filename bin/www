@@ -20,6 +20,13 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+var production = true
+
+if (production) {
+  http.get('*', function(req, res) {  
+      res.redirect('https://' + req.headers.host + req.url);
+  })
+}
 
 /**
  * Listen on provided port, on all network interfaces.
