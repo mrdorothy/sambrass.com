@@ -8,7 +8,9 @@ var production = true
 
 if (production) {
   router.get('*', function(req, res) {
-  	log(req.headers['x-forwarded-proto'])
+  	if(req.headers['x-forwarded-proto']!='https') {
+  		res.redirect('https://' + req.headers.host + req.url)
+  	}
   })
 }
 
