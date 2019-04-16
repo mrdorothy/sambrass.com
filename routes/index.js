@@ -60,7 +60,9 @@ var moment = require(`moment`)
 			for (item=0;item<inspection_object.length;item++) {
 			  	if (inspection_object[item].id == req.body.id) {
 			  		found_item=true
-			  		var return_table = marginal_loss_factor_helpers.format_properties_as_table(inspection_object[item].description)
+			  		var return_table = {}
+			  		return_table.table = marginal_loss_factor_helpers.format_properties_as_table(inspection_object[item].description)
+			  		return_table.map_output = inspection_object[item].map_output
 			  		res.send(return_table)
 			  	}
 	  		}

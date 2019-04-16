@@ -157,6 +157,9 @@
             if (control_string == '2020') {
                 control_text.id = 'current_year_text'
             }
+            if (control_string == '') {
+                control_text.id = 'inspection_map_output'
+            }
             control_text.innerHTML = control_string
             control_ui.appendChild(control_text)
 
@@ -185,6 +188,7 @@
             var right_arrow_control_div = document.createElement('div');
             var year_control_div = document.createElement('div');
             var left_arrow_control_div = document.createElement('div');
+            var inspection_control_div = document.createElement('div');
             
             var right_arrow_control = new set_control(right_arrow_control_div, map, true, '20px', '&#8702;', function() {
                 if (current_year<2020) {
@@ -205,14 +209,17 @@
                     })
                 }
             })
+            var inspection_control = new set_control(inspection_control_div, map, false,'14px', '', null)
 
             right_arrow_control_div.index = 1;
             year_control_div.index = 1;
             left_arrow_control_div.index = 1;
+            inspection_control_div.index = 1;
 
             map.controls[google.maps.ControlPosition.TOP_RIGHT].push(right_arrow_control_div);
             map.controls[google.maps.ControlPosition.TOP_RIGHT].push(year_control_div);
-            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(left_arrow_control_div);       
+            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(left_arrow_control_div);   
+            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(inspection_control_div);       
 
             $.ajax({
                 method: "POST",

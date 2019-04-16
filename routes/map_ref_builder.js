@@ -99,6 +99,7 @@ module.exports = function(callback) {
                 Type: grid_map_ref_server.transmission[line].properties.CONSTRUCTIONTYPE,
                 Status: grid_map_ref_server.transmission[line].properties.STATUS
             }
+            grid_map_ref_server.transmission[line].map_output = `${grid_map_ref_server.transmission[line].properties.NAME} ${grid_map_ref_server.transmission[line].properties.CAPACITY_kV} kV Line`
         }
 
         // Elec Station Data
@@ -140,6 +141,7 @@ module.exports = function(callback) {
                 Type: 'Substation',
                 State:grid_map_ref_server.elec_station[station].properties.REGION
             }
+            grid_map_ref_server.elec_station[station].map_output = `${grid_map_ref_server.elec_station[station].properties.ASSET_NAME} Substation`
         }
 
         // Generators Data
@@ -254,6 +256,7 @@ module.exports = function(callback) {
                                 <tr><td>FY20</td><td>${grid_map_ref_server.generator[generator].mlf_20 || ''}</td></tr>
                             </table>`
                     }
+                    grid_map_ref_server.generator[generator].map_output = `${grid_map_ref_server.generator[generator].name} (${grid_map_ref_server.generator[generator].total_cap} MW)`
                 }    
 
                 var grid_map_ref_browser_json = JSON.stringify(grid_map_ref_browser);

@@ -10,7 +10,8 @@ function inspect(inspection_type, object_id) {
             }
         })
     .done(function(return_html) {
-		$('#inspection_output').html(return_html)
+		$('#inspection_output').html(return_html.table)
+        $('#inspection_map_output').html(return_html.map_output)
 	})
 }
 
