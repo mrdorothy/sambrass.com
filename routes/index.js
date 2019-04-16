@@ -10,6 +10,8 @@ if (production) {
   router.get('*', function(req, res) {
   	if(req.headers['x-forwarded-proto']!='https') {
   		res.redirect('https://' + req.headers.host + req.url)
+  	} else {
+  		next()
   	}
   })
 }
