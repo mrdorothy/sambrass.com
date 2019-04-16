@@ -47,9 +47,9 @@ app.enable('trust proxy');
 
 
  app.use (function (req, res, next) {
-    log(req.headers['x-forwarded-proto'])
-    log(req.secure)
-    log(req.protocol)
+    console.log(req.headers['x-forwarded-proto'])
+    console.log(req.secure)
+    console.log(req.protocol)
     if (req.headers['x-forwarded-proto'] === 'https') {
       next();
     } else {
