@@ -4,6 +4,14 @@ var db = require("../db.js");
 var log = require('../helpers/log.js');
 var moment = require(`moment`)
 
+var production = true
+
+if (production) {
+  http.get('*', function(req, res) {  
+      res.redirect('https://' + req.headers.host + req.url);
+  })
+}
+
 // index
 
 	router.get('/', function(req, res, next) {
