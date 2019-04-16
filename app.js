@@ -14,6 +14,20 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.enable('trust proxy');
+
+
+ app.use (function (req, res, next) {
+    console.log(req.headers['x-forwarded-proto'])
+    console.log(req.secure)
+    console.log(req.protocol)
+    /**if (req.headers['x-forwarded-proto'] === 'https') {
+      next()
+    } else {
+      res.redirect('https://' + req.headers.host + req.url);
+    }**/
+  })
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -42,20 +56,4 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-app.enable('trust proxy');
-
-
- app.use (function (req, res, next) {
-    console.log(req.headers['x-forwarded-proto'])
-    console.log(req.secure)
-    console.log(req.protocol)
-    /**if (req.headers['x-forwarded-proto'] === 'https') {
-      next()
-    } else {
-      res.redirect('https://' + req.headers.host + req.url);
-    }**/
-  })
-
-
 module.exports = app;
