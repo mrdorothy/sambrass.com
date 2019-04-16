@@ -246,6 +246,8 @@ module.exports = function(callback) {
                         MLF: `
                             <table>
                                 <tr><th>Year</th><th>MLF</th></tr>
+                                <tr><td>FY11</td><td>${grid_map_ref_server.generator[generator].mlf_11 || ''}</td></tr>
+                                <tr><td>FY12</td><td>${grid_map_ref_server.generator[generator].mlf_12 || ''}</td></tr>
                                 <tr><td>FY13</td><td>${grid_map_ref_server.generator[generator].mlf_13 || ''}</td></tr>
                                 <tr><td>FY14</td><td>${grid_map_ref_server.generator[generator].mlf_14 || ''}</td></tr>
                                 <tr><td>FY15</td><td>${grid_map_ref_server.generator[generator].mlf_15 || ''}</td></tr>

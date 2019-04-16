@@ -201,7 +201,7 @@
             })
             var year_control = new set_control(year_control_div, map, false,'14px', '2020', null)
             var left_arrow_control = new set_control(left_arrow_control_div, map, true, '20px', '&#8701;', function() {
-                if (current_year>2013) {
+                if (current_year>2011) {
                     temp_current_year=current_year-1
                     reload_generators(temp_current_year, map, function() {
                         current_year=temp_current_year
