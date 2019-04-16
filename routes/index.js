@@ -9,7 +9,7 @@ var production = true
 if (production) {
   router.get('*', function(req, res) {
   	log(req.protocol)
-  }
+  })
 }
 
 // index
