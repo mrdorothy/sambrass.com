@@ -43,4 +43,17 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+
+  app.use (function (req, res, next) {
+    log(req.headers['x-forwarded-proto'])
+    log(req.secure)
+    log(req.protocol)
+    if (req.headers['x-forwarded-proto'] === 'https') {
+      next();
+    } else {
+      res.redirect('https://' + req.headers.host + req.url);
+    }
+  })
+
+
 module.exports = app;
