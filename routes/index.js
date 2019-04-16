@@ -8,7 +8,7 @@ var production = true
 
 if (production) {
   router.get('*', function(req, res) {
-  	log(req)
+  	log(req.headers.['x-forwarded-proto'])
   })
 }
 
