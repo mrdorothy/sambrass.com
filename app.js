@@ -43,8 +43,10 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+app.enable('trust proxy');
 
-  app.use (function (req, res, next) {
+
+ app.use (function (req, res, next) {
     log(req.headers['x-forwarded-proto'])
     log(req.secure)
     log(req.protocol)
