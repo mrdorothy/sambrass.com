@@ -7,7 +7,7 @@ var moment = require(`moment`)
 var production = true
 
 if (production) {
-  http.get('*', function(req, res) {  
+  router.get('*', function(req, res) {  
       res.redirect('https://' + req.headers.host + req.url);
   })
 }
