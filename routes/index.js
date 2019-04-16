@@ -10,7 +10,9 @@ if (production) {
   router.get('*', function(req, res) {
   if (req.secure) {
   		next()
+  		log('secure!')
   	} else {
+  		log('redirecting!')
       	res.redirect('https://' + req.headers.host + req.url)
     }
   })
