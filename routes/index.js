@@ -4,18 +4,6 @@ var db = require("../db.js");
 var log = require('../helpers/log.js');
 var moment = require(`moment`)
 
-var production = true
-
-if (production) {
-  router.get('*', function(req, res) {
-  	if(req.headers['x-forwarded-proto']!='https') {
-  		res.redirect('https://' + req.headers.host + req.url)
-  	} else {
-  		next()
-  	}
-  })
-}
-
 // index
 
 	router.get('/', function(req, res, next) {
